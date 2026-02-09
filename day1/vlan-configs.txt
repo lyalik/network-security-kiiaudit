@@ -1,0 +1,61 @@
+ enable
+configure terminal
+
+! Создаём VLAN
+vlan 10
+ name ASU_TP
+ exit
+
+vlan 20
+ name CORPORATE
+ exit
+
+vlan 30
+ name DMZ
+ exit
+
+! Назначаем порты
+interface fa0/1
+ switchport mode access
+ switchport access vlan 10
+ exit
+
+interface fa0/2
+ switchport mode access
+ switchport access vlan 20
+ exit
+
+interface fa0/3
+ switchport mode access
+ switchport access vlan 30
+ exit
+
+! Включаем маршрутизацию между VLAN (SVI)
+interface vlan 10
+ ip address 192.168.10.1 255.255.255.0
+ no shutdown
+ exit
+
+interface vlan 20
+ ip address 192.168.20.1 255.255.255.0
+ no shutdown
+ exit
+
+interface vlan 30
+ ip address 192.168.30.1 255.255.255.0
+ no shutdown
+ exit
+
+! ACL: запретить доступ из офиса (VLAN 20) в АСУ ТП (VLAN 10)
+ip access-list extended BLOCK_CORP_TO_ASUTP
+ deny ip 192.168.20.0 0.0.0.255 192.168.10.0 0.0.0.255
+ permit ip any any
+ exit
+
+! Применяем ACL на интерфейсе VLAN 10 (входящий трафик)
+interface vlan 10
+ ip access-group BLOCK_CORP_TO_ASUTP in
+ exit
+
+end
+write memory

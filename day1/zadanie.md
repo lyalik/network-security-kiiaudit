@@ -16,7 +16,11 @@
 	
 Схема в portfolio/day1/kii-architecture.png
 3. Практика
-	
+
+https://github.com/SmartFinn/eve-ng-integration?tab=readme-ov-file
+
+
+
 Настроить 3 VLAN в Packet Tracer/EVE-NG:
 – VLAN 10: АСУ ТП (промышленные системы)
 – VLAN 20: Корпоративная сеть (офис)
